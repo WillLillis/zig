@@ -568,6 +568,7 @@ pub const Manifest = struct {
                         if (try self.upgradeToExclusiveLock()) continue;
                         return false;
                     },
+                    error.AccessDenied => return error.AccessDenied,
                     else => return error.CacheUnavailable,
                 };
                 defer this_file.close();
