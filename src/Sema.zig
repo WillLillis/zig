@@ -29256,11 +29256,11 @@ const InMemoryCoercionResult = union(enum) {
                 break;
             },
             .ptr_sentinel => |sentinel| {
-                if (sentinel.actual.toIntern() != .unreachable_value) {
+                if (sentinel.actual.toIntern() != .unreachable_value and sentinel.wanted.toIntern() != .unreachable_value) {
                     try sema.errNote(src, msg, "pointer sentinel '{f}' cannot cast into pointer sentinel '{f}'", .{
                         sentinel.actual.fmtValueSema(pt, sema), sentinel.wanted.fmtValueSema(pt, sema),
                     });
-                } else {
+                } else if (sentinel.wanted.toIntern() != .unreachable_value) {
                     try sema.errNote(src, msg, "destination pointer requires '{f}' sentinel", .{
                         sentinel.wanted.fmtValueSema(pt, sema),
                     });
